@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+                  id="empty-definitions" 
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn2:process id="Process_1756289575935" isExecutable="true">
+    <bpmn2:startEvent id="StartEvent_1" name="Start">
+      <bpmn2:outgoing>Flow_1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:endEvent id="EndEvent_1" name="End">
+      <bpmn2:incoming>Flow_3</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:task id="ServiceTask_ApiCall" name="Call External API">
+      <bpmn2:incoming>Flow_1</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_2</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="ScriptTask_PrintResult" name="Print API Result">
+      <bpmn2:incoming>Flow_2</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_3</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:dataObject id="DataObject_ApiResponse" name="ApiResponse" />
+    <bpmn2:dataObjectReference id="DataObjectRef_ApiResponse" name="ApiResponse" dataObjectRef="DataObject_ApiResponse" />
+    <bpmn2:dataOutputAssociation id="DataOutputAssociation_1">
+      <bpmn2:sourceRef>ServiceTask_ApiCall</bpmn2:sourceRef>
+      <bpmn2:targetRef>DataObjectRef_ApiResponse</bpmn2:targetRef>
+    </bpmn2:dataOutputAssociation>
+    <bpmn2:dataInputAssociation id="DataInputAssociation_1">
+      <bpmn2:sourceRef>DataObjectRef_ApiResponse</bpmn2:sourceRef>
+      <bpmn2:targetRef>ScriptTask_PrintResult</bpmn2:targetRef>
+    </bpmn2:dataInputAssociation>
+    <bpmn2:sequenceFlow id="Flow_1" name="Start to API Call" sourceRef="StartEvent_1" targetRef="ServiceTask_ApiCall" />
+    <bpmn2:sequenceFlow id="Flow_2" name="API Call to Print" sourceRef="ServiceTask_ApiCall" targetRef="ScriptTask_PrintResult" />
+    <bpmn2:sequenceFlow id="Flow_3" name="Print to End" sourceRef="ScriptTask_PrintResult" targetRef="EndEvent_1" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1756289575935">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="150" y="100" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="150" y="141" width="36" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="510" y="100" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="510" y="141" width="36" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_ApiCall_di" bpmnElement="ServiceTask_ApiCall">
+        <dc:Bounds x="250" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="250" y="165" width="100" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ScriptTask_PrintResult_di" bpmnElement="ScriptTask_PrintResult">
+        <dc:Bounds x="380" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="380" y="165" width="100" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectRef_ApiResponse_di" bpmnElement="DataObjectRef_ApiResponse">
+        <dc:Bounds x="300" y="200" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="300" y="255" width="36" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="186" y="118" />
+        <di:waypoint x="250" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="350" y="120" />
+        <di:waypoint x="380" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="480" y="120" />
+        <di:waypoint x="510" y="118" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1_di" bpmnElement="DataOutputAssociation_1">
+        <di:waypoint x="300" y="160" />
+        <di:waypoint x="300" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1_di" bpmnElement="DataInputAssociation_1">
+        <di:waypoint x="300" y="200" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

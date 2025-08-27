@@ -1,0 +1,559 @@
+/* Start Event Node */
+.start-event-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.start-event-circle {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #4caf50;
+  border-radius: 50%;
+  background: #e8f5e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* End Event Node */
+.end-event-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.end-event-circle {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f44336;
+  border-radius: 50%;
+  background: #ffebee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Task Node */
+.task-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.task-content {
+  width: 100px;
+  height: 60px;
+  border: 1px solid #2196f3;
+  border-radius: 6px;
+  background: #e3f2fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+/* Gateway Node */
+.gateway-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.gateway-diamond {
+  width: 50px;
+  height: 50px;
+  background: #fff3e0;
+  border: 1px solid #ff9800;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Data Object Node */
+.data-object-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.data-object-content {
+  width: 36px;
+  height: 50px;
+  background: #f5f5f5;
+  border: 1px solid #9e9e9e;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  position: relative;
+}
+
+.data-object-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-left: 8px solid #f5f5f5;
+  border-top: 8px solid #9e9e9e;
+  border-bottom: 8px solid transparent;
+}
+
+.data-object-icon {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+/* Node Labels */
+.node-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  line-height: 1.2;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gateway-diamond .node-label {
+  transform: rotate(-45deg);
+  font-size: 8px;
+  max-width: 30px;
+}
+
+.data-object-content .node-label {
+  font-size: 7px;
+  max-width: 28px;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* Handles */
+.handle {
+  width: 8px;
+  height: 8px;
+  background: #666;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+.handle:hover {
+  background: #1976d2;
+}
+
+/* Node hover states */
+.start-event-node:hover .start-event-circle {
+  border-color: #388e3c;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+}
+
+.end-event-node:hover .end-event-circle {
+  border-color: #d32f2f;
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.3);
+}
+
+.task-node:hover .task-content {
+  border-color: #1976d2;
+  box-shadow: 0 0 8px rgba(33, 150, 243, 0.3);
+}
+
+.gateway-node:hover .gateway-diamond {
+  border-color: #f57c00;
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.3);
+}
+
+.data-object-node:hover .data-object-content {
+  border-color: #757575;
+  box-shadow: 0 0 8px rgba(158, 158, 158, 0.3);
+}
+
+/* Intermediate Event Node */
+.intermediate-event-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.intermediate-event-circle {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ff9800;
+  border-radius: 50%;
+  background: #fff3e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.intermediate-event-circle::before {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ff9800;
+  border-radius: 50%;
+}
+
+.event-icon {
+  font-size: 14px;
+  z-index: 1;
+}
+
+.node-label-below {
+  position: absolute;
+  top: 45px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* SubProcess Node */
+.subprocess-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.subprocess-content {
+  width: 120px;
+  height: 80px;
+  border: 2px solid #673ab7;
+  border-radius: 8px;
+  background: #f3e5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  position: relative;
+}
+
+.subprocess-header {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subprocess-indicator {
+  position: absolute;
+  bottom: 8px;
+  font-size: 12px;
+  color: #673ab7;
+}
+
+/* Call Activity Node */
+.call-activity-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.call-activity-content {
+  width: 120px;
+  height: 80px;
+  border: 2px solid #795548;
+  border-radius: 8px;
+  background: #efebe9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  position: relative;
+}
+
+.call-activity-border {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid #795548;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Data Store Node */
+.data-store-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.data-store-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.data-store-cylinder {
+  position: relative;
+  width: 50px;
+  height: 60px;
+}
+
+.data-store-top {
+  width: 50px;
+  height: 12px;
+  background: #e0e0e0;
+  border: 1px solid #757575;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+}
+
+.data-store-body {
+  width: 50px;
+  height: 48px;
+  background: #f5f5f5;
+  border-left: 1px solid #757575;
+  border-right: 1px solid #757575;
+  position: absolute;
+  top: 6px;
+}
+
+.data-store-bottom {
+  width: 50px;
+  height: 12px;
+  background: #e0e0e0;
+  border: 1px solid #757575;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  position: absolute;
+  bottom: 0;
+}
+
+/* Group Node */
+.group-node {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.group-content {
+  min-width: 200px;
+  min-height: 150px;
+  border: 2px dashed #9e9e9e;
+  border-radius: 8px;
+  background: rgba(245, 245, 245, 0.3);
+  padding: 8px;
+}
+
+.group-header {
+  margin-bottom: 8px;
+}
+
+.group-body {
+  flex: 1;
+  min-height: 100px;
+}
+
+/* Text Annotation Node */
+.text-annotation-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.text-annotation-content {
+  display: flex;
+  align-items: flex-start;
+  max-width: 150px;
+  padding: 4px;
+}
+
+.text-annotation-bracket {
+  font-size: 20px;
+  font-weight: bold;
+  color: #616161;
+  margin-right: 4px;
+  line-height: 1;
+}
+
+.text-annotation-text {
+  flex: 1;
+  padding: 4px;
+  background: #fffde7;
+  border: 1px solid #fbc02d;
+  border-radius: 4px;
+  border-left: none;
+}
+
+/* Hover states for new nodes */
+.intermediate-event-node:hover .intermediate-event-circle {
+  border-color: #f57c00;
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.3);
+}
+
+.subprocess-node:hover .subprocess-content {
+  border-color: #512da8;
+  box-shadow: 0 0 8px rgba(103, 58, 183, 0.3);
+}
+
+.call-activity-node:hover .call-activity-content {
+  border-color: #5d4037;
+  box-shadow: 0 0 8px rgba(121, 85, 72, 0.3);
+}
+
+.data-store-node:hover .data-store-top,
+.data-store-node:hover .data-store-body,
+.data-store-node:hover .data-store-bottom {
+  border-color: #424242;
+}
+
+.group-node:hover .group-content {
+  border-color: #616161;
+  background: rgba(245, 245, 245, 0.5);
+}
+
+.text-annotation-node:hover .text-annotation-text {
+  border-color: #f9a825;
+  box-shadow: 0 0 4px rgba(251, 192, 45, 0.3);
+}
+
+/* Participant Node */
+.participant-node {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  border: 2px solid #1976d2;
+  background: rgba(227, 242, 253, 0.05);
+  border-radius: 4px;
+  overflow: visible;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.participant-header {
+  width: 40px;
+  background: #e3f2fd;
+  border-right: 2px solid #1976d2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 10px 5px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.participant-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1976d2;
+  white-space: nowrap;
+}
+
+.participant-body {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  position: relative;
+  overflow: visible;
+  min-height: 200px;
+}
+
+/* Lane Node */
+.lane-node {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  border: 1px solid #757575;
+  background: rgba(245, 245, 245, 0.1);
+  border-radius: 2px;
+  overflow: visible;
+  z-index: 1;
+}
+
+.lane-header {
+  width: 30px;
+  background: #f5f5f5;
+  border-right: 1px solid #757575;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 8px 3px;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.lane-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #424242;
+  white-space: nowrap;
+}
+
+.lane-body {
+  flex: 1;
+  padding: 8px;
+  background: transparent;
+  position: relative;
+  overflow: visible;
+  min-height: 100px;
+}
+
+/* Pool (for multiple participants) */
+.pool-container {
+  border: 2px solid #1976d2;
+  background: #ffffff;
+  position: relative;
+  min-width: 500px;
+  min-height: 300px;
+}
+
+.pool-header {
+  background: #e3f2fd;
+  padding: 8px 12px;
+  border-bottom: 1px solid #1976d2;
+  font-weight: 600;
+  color: #1976d2;
+  text-align: center;
+}
+
+.pool-participants {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hover states */
+.participant-node:hover {
+  border-color: #1565c0;
+  box-shadow: 0 0 8px rgba(25, 118, 210, 0.3);
+}
+
+.lane-node:hover {
+  border-color: #424242;
+  box-shadow: 0 0 4px rgba(117, 117, 117, 0.3);
+}
