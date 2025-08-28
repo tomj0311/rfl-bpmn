@@ -1,7 +1,7 @@
 import React from 'react';
 import './Toolbar.css';
 
-const Toolbar = () => {
+const Toolbar = ({ isDarkMode, onToggleTheme }) => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -9,128 +9,147 @@ const Toolbar = () => {
 
   return (
     <div className="toolbar">
+      {/* Theme Toggle Button */}
       <div className="toolbar-section">
-        <h3>Events</h3>
+        <div className="theme-toggle-container">
+          <button
+            className="theme-toggle-button"
+            onClick={onToggleTheme}
+            title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            aria-label="Toggle theme"
+          >
+            <div className={`theme-icon ${isDarkMode ? 'moon' : 'sun'}`}>
+              {isDarkMode ? (
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75zM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0zM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59zM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75zM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591zM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18zM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59zM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12zM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591z"/>
+                </svg>
+              )}
+            </div>
+          </button>
+        </div>
+      </div>
+      
+      <div className="toolbar-section">
         <div className="toolbar-items">
           <div
             className="toolbar-item start-event"
             onDragStart={(event) => onDragStart(event, 'startEvent')}
             draggable
+            title="Start Event"
           >
             <div className="start-event-icon"></div>
-            <span>Start Event</span>
           </div>
           <div
             className="toolbar-item end-event"
             onDragStart={(event) => onDragStart(event, 'endEvent')}
             draggable
+            title="End Event"
           >
             <div className="end-event-icon"></div>
-            <span>End Event</span>
           </div>
           <div
             className="toolbar-item intermediate-event"
             onDragStart={(event) => onDragStart(event, 'intermediateEvent')}
             draggable
+            title="Intermediate Event"
           >
             <div className="intermediate-event-icon"></div>
-            <span>Intermediate Event</span>
           </div>
         </div>
       </div>
       
       <div className="toolbar-section">
-        <h3>Tasks</h3>
         <div className="toolbar-items">
           <div
             className="toolbar-item task"
             onDragStart={(event) => onDragStart(event, 'task')}
             draggable
+            title="Task"
           >
             <div className="task-icon"></div>
-            <span>Task</span>
           </div>
           <div
             className="toolbar-item service-task"
             onDragStart={(event) => onDragStart(event, 'serviceTask')}
             draggable
+            title="Service Task"
           >
             <div className="service-task-icon"></div>
-            <span>Service Task</span>
           </div>
           <div
             className="toolbar-item user-task"
             onDragStart={(event) => onDragStart(event, 'userTask')}
             draggable
+            title="User Task"
           >
             <div className="user-task-icon"></div>
-            <span>User Task</span>
           </div>
           <div
             className="toolbar-item script-task"
             onDragStart={(event) => onDragStart(event, 'scriptTask')}
             draggable
+            title="Script Task"
           >
             <div className="script-task-icon"></div>
-            <span>Script Task</span>
           </div>
         </div>
       </div>
       
       <div className="toolbar-section">
-        <h3>Gateways</h3>
         <div className="toolbar-items">
           <div
             className="toolbar-item gateway"
             onDragStart={(event) => onDragStart(event, 'exclusiveGateway')}
             draggable
+            title="Exclusive Gateway"
           >
             <div className="gateway-icon"></div>
-            <span>Exclusive Gateway</span>
           </div>
           <div
             className="toolbar-item parallel-gateway"
             onDragStart={(event) => onDragStart(event, 'parallelGateway')}
             draggable
+            title="Parallel Gateway"
           >
             <div className="parallel-gateway-icon"></div>
-            <span>Parallel Gateway</span>
           </div>
           <div
             className="toolbar-item inclusive-gateway"
             onDragStart={(event) => onDragStart(event, 'inclusiveGateway')}
             draggable
+            title="Inclusive Gateway"
           >
             <div className="inclusive-gateway-icon"></div>
-            <span>Inclusive Gateway</span>
           </div>
         </div>
       </div>
       
       <div className="toolbar-section">
-        <h3>Sub-processes</h3>
         <div className="toolbar-items">
           <div
             className="toolbar-item subprocess"
             onDragStart={(event) => onDragStart(event, 'subProcess')}
             draggable
+            title="Sub Process"
           >
             <div className="subprocess-icon"></div>
-            <span>Sub Process</span>
           </div>
           <div
             className="toolbar-item call-activity"
             onDragStart={(event) => onDragStart(event, 'callActivity')}
             draggable
+            title="Call Activity"
           >
             <div className="call-activity-icon"></div>
-            <span>Call Activity</span>
           </div>
         </div>
       </div>
       
       <div className="toolbar-section">
-        <h3>Data</h3>
         <div className="toolbar-items">
           <div
             className="toolbar-item data-object"
@@ -138,7 +157,6 @@ const Toolbar = () => {
             draggable
           >
             <div className="data-object-icon"></div>
-            <span>Data Object</span>
           </div>
           <div
             className="toolbar-item data-store"
@@ -146,51 +164,48 @@ const Toolbar = () => {
             draggable
           >
             <div className="data-store-icon"></div>
-            <span>Data Store</span>
           </div>
         </div>
       </div>
       
       <div className="toolbar-section">
-        <h3>Artifacts</h3>
         <div className="toolbar-items">
           <div
             className="toolbar-item group"
             onDragStart={(event) => onDragStart(event, 'group')}
             draggable
+            title="Group"
           >
             <div className="group-icon"></div>
-            <span>Group</span>
           </div>
           <div
             className="toolbar-item text-annotation"
             onDragStart={(event) => onDragStart(event, 'textAnnotation')}
             draggable
+            title="Text Annotation"
           >
             <div className="text-annotation-icon"></div>
-            <span>Text Annotation</span>
           </div>
         </div>
       </div>
       
       <div className="toolbar-section">
-        <h3>Participants</h3>
         <div className="toolbar-items">
           <div
             className="toolbar-item participant"
             onDragStart={(event) => onDragStart(event, 'participant')}
             draggable
+            title="Participant"
           >
             <div className="participant-icon"></div>
-            <span>Participant</span>
           </div>
           <div
             className="toolbar-item lane"
             onDragStart={(event) => onDragStart(event, 'lane')}
             draggable
+            title="Lane"
           >
             <div className="lane-icon"></div>
-            <span>Lane</span>
           </div>
         </div>
       </div>

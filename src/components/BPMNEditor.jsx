@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -77,14 +77,15 @@ const initialEdges = [];
 let id = 1;
 const getId = () => `dndnode_${id++}`;
 
-const BPMNEditorFlow = () => {
+const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const { project } = useReactFlow();
+  const [shouldFitView, setShouldFitView] = useState(false);
+  const { project, fitView } = useReactFlow();
 
   // Utility function to recalculate participant bounds based on child nodes
   const updateParticipantBounds = useCallback((participantId, allNodes) => {
@@ -236,11 +237,47 @@ const BPMNEditorFlow = () => {
         y: event.clientY - reactFlowWrapper.current.getBoundingClientRect().top,
       });
 
+      // Set appropriate default names without "node" suffix
+      const getDefaultLabel = (nodeType) => {
+        const typeNames = {
+          startEvent: 'Start',
+          endEvent: 'End',
+          intermediateEvent: 'Intermediate',
+          intermediateCatchEvent: 'Intermediate',
+          intermediateThrowEvent: 'Intermediate',
+          boundaryEvent: 'Boundary',
+          task: 'Task',
+          serviceTask: 'Service Task',
+          userTask: 'User Task',
+          scriptTask: 'Script Task',
+          businessRuleTask: 'Business Rule Task',
+          sendTask: 'Send Task',
+          receiveTask: 'Receive Task',
+          manualTask: 'Manual Task',
+          subProcess: 'Sub Process',
+          callActivity: 'Call Activity',
+          exclusiveGateway: 'Exclusive Gateway',
+          inclusiveGateway: 'Inclusive Gateway',
+          parallelGateway: 'Parallel Gateway',
+          eventBasedGateway: 'Event Gateway',
+          complexGateway: 'Complex Gateway',
+          dataObject: 'Data Object',
+          dataObjectReference: 'Data Object',
+          dataStore: 'Data Store',
+          dataStoreReference: 'Data Store',
+          group: 'Group',
+          textAnnotation: 'Annotation',
+          participant: 'Participant',
+          lane: 'Lane'
+        };
+        return typeNames[nodeType] || nodeType.charAt(0).toUpperCase() + nodeType.slice(1);
+      };
+
       const newNode = {
         id: getId(),
         type,
         position,
-        data: { label: `${type} node` },
+        data: { label: getDefaultLabel(type) },
       };
 
       setNodes((nds) => {
@@ -292,6 +329,54 @@ const BPMNEditorFlow = () => {
     }
   }, [setNodes]);
 
+  // Delete functionality - handle Delete key press
+  const onKeyDown = useCallback((event) => {
+    if (event.key === 'Delete' || event.key === 'Backspace') {
+      setNodes((nds) => nds.filter((node) => !node.selected));
+      setEdges((eds) => eds.filter((edge) => !edge.selected));
+    }
+  }, [setNodes, setEdges]);
+
+  // Add keyboard event listener
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Only handle delete if the focus is on the ReactFlow container or its children
+      if (event.target.closest('.reactflow-wrapper') || event.target.closest('.react-flow')) {
+        onKeyDown(event);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onKeyDown]);
+
+  // Effect to trigger fitView after BPMN import
+  useEffect(() => {
+    if (shouldFitView && nodes.length > 0) {
+      const timer = setTimeout(() => {
+        if (fitView) {
+          fitView({ 
+            padding: 0.1, 
+            duration: 800,
+            includeHiddenNodes: true 
+          });
+        }
+        if (reactFlowInstance) {
+          reactFlowInstance.fitView({ 
+            padding: 0.1, 
+            duration: 800,
+            includeHiddenNodes: true 
+          });
+        }
+        setShouldFitView(false);
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [shouldFitView, nodes, fitView, reactFlowInstance]);
+
   const handleImportBPMN = useCallback((importedNodes, importedEdges) => {
     setNodes(importedNodes);
     setEdges(importedEdges);
@@ -316,6 +401,9 @@ const BPMNEditorFlow = () => {
       0
     );
     id = maxNodeId + 1;
+    
+    // Trigger fit view after nodes are set
+    setShouldFitView(true);
   }, [setNodes, setEdges, setParticipants]);
 
   const handleAddParticipant = useCallback((participantName) => {
@@ -386,48 +474,50 @@ const BPMNEditorFlow = () => {
 
   return (
     <div className="bpmn-editor">
-      <Toolbar />
-      <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChangeWithBoundsUpdate}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onInit={setReactFlowInstance}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          onNodeDoubleClick={onNodeDoubleClick}
-          nodeTypes={nodeTypes}
-          fitView
-          nodesDraggable={true}
-          nodesConnectable={true}
-          elementsSelectable={true}
-          style={{ 
-            marginRight: isPanelOpen ? '25vw' : '0', 
-            maxWidth: isPanelOpen ? '75vw' : '100vw',
-            transition: 'margin-right 0.3s ease, max-width 0.3s ease'
-          }}
-        >
-          <Controls />
-          <MiniMap />
-          <Background variant="dots" gap={12} size={1} />
-        </ReactFlow>
+      <Toolbar isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
+      <div className="editor-content">
+        <div className="reactflow-wrapper" ref={reactFlowWrapper} tabIndex={0}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChangeWithBoundsUpdate}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onInit={setReactFlowInstance}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            onNodeDoubleClick={onNodeDoubleClick}
+            nodeTypes={nodeTypes}
+            nodesDraggable={true}
+            nodesConnectable={true}
+            elementsSelectable={true}
+            deleteKeyCode={null}
+            style={{ 
+              marginRight: isPanelOpen ? '25vw' : '0', 
+              maxWidth: isPanelOpen ? '75vw' : '100vw',
+              transition: 'margin-right 0.3s ease, max-width 0.3s ease'
+            }}
+          >
+            <Controls />
+            <MiniMap />
+            <Background variant="dots" gap={12} size={1} />
+          </ReactFlow>
+        </div>
+        <BPMNExporter nodes={nodes} edges={edges} onImportBPMN={handleImportBPMN} />
+        <ParticipationPanel 
+          onAddParticipant={handleAddParticipant}
+          onAddLane={handleAddLane}
+          participants={participants}
+          onPanelToggle={setIsPanelOpen}
+        />
       </div>
-      <BPMNExporter nodes={nodes} edges={edges} onImportBPMN={handleImportBPMN} />
-      <ParticipationPanel 
-        onAddParticipant={handleAddParticipant}
-        onAddLane={handleAddLane}
-        participants={participants}
-        onPanelToggle={setIsPanelOpen}
-      />
     </div>
   );
 };
 
-const BPMNEditor = () => (
+const BPMNEditor = ({ isDarkMode, onToggleTheme }) => (
   <ReactFlowProvider>
-    <BPMNEditorFlow />
+    <BPMNEditorFlow isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
   </ReactFlowProvider>
 );
 
