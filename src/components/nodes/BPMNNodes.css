@@ -459,8 +459,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
   padding: 10px 5px;
   height: 100%;
   flex-shrink: 0;
@@ -468,9 +466,11 @@
 
 .participant-label {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 600; 
   color: #1976d2;
   white-space: nowrap;
+  transform: rotate(-90deg);
+  transform-origin: center;
 }
 
 .participant-body {
@@ -501,8 +501,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
   padding: 8px 3px;
   flex-shrink: 0;
   height: 100%;
@@ -513,6 +511,8 @@
   font-weight: 500;
   color: #424242;
   white-space: nowrap;
+  transform: rotate(-90deg);
+  transform-origin: center;
 }
 
 .lane-body {

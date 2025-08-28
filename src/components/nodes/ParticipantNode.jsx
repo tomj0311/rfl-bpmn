@@ -45,14 +45,18 @@ const ParticipantNode = ({ data, style }) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                writingMode: 'vertical-rl',
-                textOrientation: 'mixed',
                 fontSize: '11px',
                 fontWeight: '500',
                 color: '#424242'
               }}
             >
-              {lane.name}
+              <span style={{ 
+                transform: 'rotate(-90deg)', 
+                transformOrigin: 'center',
+                whiteSpace: 'nowrap'
+              }}>
+                {lane.name}
+              </span>
             </div>
           );
         })}
