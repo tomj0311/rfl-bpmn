@@ -101,15 +101,15 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
       if (edge.data?.isMessageFlow || edge.type === 'messageFlow') {
         return {
           ...edge,
-          type: edge.type || 'smoothstep',
+          type: 'smoothstep',
           className: 'message-flow',
           markerEnd: {
             type: MarkerType.ArrowClosed,
-            width: 12,
-            height: 12,
-            color: 'var(--message-flow-color)',
           },
           style: {
+            stroke: '#6366f1',
+            strokeDasharray: '5,5',
+            strokeWidth: 2,
             ...edge.style,
           },
         };
@@ -117,14 +117,13 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
       
       return {
         ...edge,
-        type: edge.type || 'smoothstep', // Use smoothstep type for curved lines with smooth bends
+        type: 'smoothstep',
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          width: 12,
-          height: 12,
-          color: 'var(--text-secondary)',
         },
         style: {
+          stroke: '#64748b',
+          strokeWidth: 2,
           ...edge.style,
         },
       };

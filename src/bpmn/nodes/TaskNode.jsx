@@ -36,56 +36,40 @@ const TaskNode = ({ data }) => {
 
   return (
     <div className="task-node">
-      {/* Original handles for backward compatibility */}
+      {/* Original handles for backward compatibility - main connection points */}
       <Handle
         type="target"
         position={Position.Left}
         id="task-input"
         className="handle"
+        style={{ top: '50%' }}
+        isConnectable={true}
       />
       <Handle
         type="source"
         position={Position.Right}
         id="task-output"
         className="handle"
+        style={{ top: '50%' }}
+        isConnectable={true}
       />
       
-      {/* Additional handles for more connection flexibility */}
-      <Handle
-        type="source"
-        position={Position.Left}
-        id="task-left-source"
-        className="handle"
-      />
-      <Handle
-        type="target"
-        position={Position.Right}
-        id="task-right-target"
-        className="handle"
-      />
-      <Handle
-        type="source"
-        position={Position.Top}
-        id="task-top-source"
-        className="handle"
-      />
+      {/* Additional handles for top and bottom connections */}
       <Handle
         type="target"
         position={Position.Top}
-        id="task-top-target"
+        id="task-top"
         className="handle"
+        style={{ left: '50%' }}
+        isConnectable={true}
       />
       <Handle
         type="source"
         position={Position.Bottom}
-        id="task-bottom-source"
+        id="task-bottom"
         className="handle"
-      />
-      <Handle
-        type="target"
-        position={Position.Bottom}
-        id="task-bottom-target"
-        className="handle"
+        style={{ left: '50%' }}
+        isConnectable={true}
       />
       
       <div className="task-content">
