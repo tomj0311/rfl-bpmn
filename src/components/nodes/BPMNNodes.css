@@ -56,6 +56,18 @@
   align-items: center;
   justify-content: center;
   padding: 8px;
+  position: relative;
+}
+
+.task-type-icon {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 12px;
+  line-height: 1;
+  min-width: 14px;
+  text-align: center;
+  z-index: 1;
 }
 
 /* Gateway Node */
@@ -556,4 +568,51 @@
 .lane-node:hover {
   border-color: #424242;
   box-shadow: 0 0 4px rgba(117, 117, 117, 0.3);
+}
+
+/* Remove default React Flow node backgrounds in dark mode */
+.react-flow__node-default {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.react-flow__node-input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.react-flow__node-output {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure our custom nodes don't inherit React Flow backgrounds */
+.start-event-node,
+.end-event-node,
+.gateway-node,
+.intermediate-event-node {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Dark mode specific overrides */
+@media (prefers-color-scheme: dark) {
+  .react-flow__node {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .start-event-node,
+  .end-event-node,
+  .gateway-node,
+  .intermediate-event-node {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
 }

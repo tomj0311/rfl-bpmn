@@ -1,7 +1,7 @@
 import React from 'react';
 import './Toolbar.css';
 
-const Toolbar = ({ isDarkMode, onToggleTheme }) => {
+const Toolbar = ({ isDarkMode, onToggleTheme, isPropertyPanelOpen, onTogglePropertyPanel }) => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -95,6 +95,38 @@ const Toolbar = ({ isDarkMode, onToggleTheme }) => {
             title="Script Task"
           >
             <div className="script-task-icon"></div>
+          </div>
+          <div
+            className="toolbar-item business-rule-task"
+            onDragStart={(event) => onDragStart(event, 'businessRuleTask')}
+            draggable
+            title="Business Rule Task"
+          >
+            <div className="business-rule-task-icon"></div>
+          </div>
+          <div
+            className="toolbar-item send-task"
+            onDragStart={(event) => onDragStart(event, 'sendTask')}
+            draggable
+            title="Send Task"
+          >
+            <div className="send-task-icon"></div>
+          </div>
+          <div
+            className="toolbar-item receive-task"
+            onDragStart={(event) => onDragStart(event, 'receiveTask')}
+            draggable
+            title="Receive Task"
+          >
+            <div className="receive-task-icon"></div>
+          </div>
+          <div
+            className="toolbar-item manual-task"
+            onDragStart={(event) => onDragStart(event, 'manualTask')}
+            draggable
+            title="Manual Task"
+          >
+            <div className="manual-task-icon"></div>
           </div>
         </div>
       </div>
@@ -207,6 +239,24 @@ const Toolbar = ({ isDarkMode, onToggleTheme }) => {
           >
             <div className="lane-icon"></div>
           </div>
+        </div>
+      </div>
+
+      {/* Property Panel Toggle */}
+      <div className="toolbar-section">
+        <div className="property-panel-toggle-container">
+          <button
+            className={`property-panel-toggle-button ${isPropertyPanelOpen ? 'active' : ''}`}
+            onClick={onTogglePropertyPanel}
+            title={isPropertyPanelOpen ? "Hide Properties Panel" : "Show Properties Panel"}
+            aria-label="Toggle properties panel"
+          >
+            <div className="properties-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 17h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V5H3z"/>
+              </svg>
+            </div>
+          </button>
         </div>
       </div>
     </div>

@@ -28,6 +28,7 @@ import TextAnnotationNode from './nodes/TextAnnotationNode';
 import ParticipantNode from './nodes/ParticipantNode';
 import LaneNode from './nodes/LaneNode';
 import ParticipationPanel from './ParticipationPanel';
+import PropertyPanel from './PropertyPanel';
 import './BPMNEditor.css';
 
 const nodeTypes = {
@@ -85,6 +86,9 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
   const [participants, setParticipants] = useState([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [shouldFitView, setShouldFitView] = useState(false);
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedEdge, setSelectedEdge] = useState(null);
+  const [isPropertyPanelOpen, setIsPropertyPanelOpen] = useState(false);
   const { project, fitView } = useReactFlow();
 
   // Utility function to recalculate participant bounds based on child nodes
@@ -277,7 +281,10 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
         id: getId(),
         type,
         position,
-        data: { label: getDefaultLabel(type) },
+        data: { 
+          label: getDefaultLabel(type),
+          taskType: type 
+        },
       };
 
       setNodes((nds) => {
@@ -328,6 +335,64 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
       );
     }
   }, [setNodes]);
+
+  // Selection handlers
+  const onSelectionChange = useCallback(({ nodes, edges }) => {
+    const selectedNode = nodes.find(node => node.selected);
+    const selectedEdge = edges.find(edge => edge.selected);
+    
+    setSelectedNode(selectedNode || null);
+    setSelectedEdge(selectedEdge || null);
+    
+    // Auto-open property panel when something is selected
+    if ((selectedNode || selectedEdge) && !isPropertyPanelOpen) {
+      setIsPropertyPanelOpen(true);
+    }
+  }, [isPropertyPanelOpen]);
+
+  // Node click handler
+  const onNodeClick = useCallback((event, node) => {
+    setSelectedNode(node);
+    setSelectedEdge(null);
+    if (!isPropertyPanelOpen) {
+      setIsPropertyPanelOpen(true);
+    }
+  }, [isPropertyPanelOpen]);
+
+  // Edge click handler
+  const onEdgeClick = useCallback((event, edge) => {
+    setSelectedEdge(edge);
+    setSelectedNode(null);
+    if (!isPropertyPanelOpen) {
+      setIsPropertyPanelOpen(true);
+    }
+  }, [isPropertyPanelOpen]);
+
+  // Pane click handler (deselect all)
+  const onPaneClick = useCallback(() => {
+    setSelectedNode(null);
+    setSelectedEdge(null);
+  }, []);
+
+  // Update node data from property panel
+  const handleNodeUpdate = useCallback((updatedNode) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === updatedNode.id ? updatedNode : node
+      )
+    );
+    setSelectedNode(updatedNode);
+  }, [setNodes]);
+
+  // Update edge data from property panel
+  const handleEdgeUpdate = useCallback((updatedEdge) => {
+    setEdges((eds) =>
+      eds.map((edge) =>
+        edge.id === updatedEdge.id ? updatedEdge : edge
+      )
+    );
+    setSelectedEdge(updatedEdge);
+  }, [setEdges]);
 
   // Delete functionality - handle Delete key press
   const onKeyDown = useCallback((event) => {
@@ -474,7 +539,12 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
 
   return (
     <div className="bpmn-editor">
-      <Toolbar isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
+      <Toolbar 
+        isDarkMode={isDarkMode} 
+        onToggleTheme={onToggleTheme}
+        isPropertyPanelOpen={isPropertyPanelOpen}
+        onTogglePropertyPanel={() => setIsPropertyPanelOpen(!isPropertyPanelOpen)}
+      />
       <div className="editor-content">
         <div className="reactflow-wrapper" ref={reactFlowWrapper} tabIndex={0}>
           <ReactFlow
@@ -487,20 +557,23 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
             onDrop={onDrop}
             onDragOver={onDragOver}
             onNodeDoubleClick={onNodeDoubleClick}
+            onNodeClick={onNodeClick}
+            onEdgeClick={onEdgeClick}
+            onPaneClick={onPaneClick}
+            onSelectionChange={onSelectionChange}
             nodeTypes={nodeTypes}
             nodesDraggable={true}
             nodesConnectable={true}
             elementsSelectable={true}
             deleteKeyCode={null}
             style={{ 
-              marginRight: isPanelOpen ? '25vw' : '0', 
-              maxWidth: isPanelOpen ? '75vw' : '100vw',
+              marginRight: (isPanelOpen ? '25vw' : '0') + (isPropertyPanelOpen ? '320px' : '0'), 
+              maxWidth: `calc(100vw - ${isPanelOpen ? '25vw' : '0'} - ${isPropertyPanelOpen ? '320px' : '0'})`,
               transition: 'margin-right 0.3s ease, max-width 0.3s ease'
             }}
           >
             <Controls />
             <MiniMap />
-            <Background variant="dots" gap={12} size={1} />
           </ReactFlow>
         </div>
         <BPMNExporter nodes={nodes} edges={edges} onImportBPMN={handleImportBPMN} />
@@ -509,6 +582,14 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
           onAddLane={handleAddLane}
           participants={participants}
           onPanelToggle={setIsPanelOpen}
+        />
+        <PropertyPanel
+          selectedNode={selectedNode}
+          selectedEdge={selectedEdge}
+          onNodeUpdate={handleNodeUpdate}
+          onEdgeUpdate={handleEdgeUpdate}
+          isOpen={isPropertyPanelOpen}
+          onToggle={() => setIsPropertyPanelOpen(!isPropertyPanelOpen)}
         />
       </div>
     </div>

@@ -161,6 +161,16 @@
   border-radius: 3px;
   background: var(--accent-bg-light);
   background: color-mix(in srgb, var(--accent-color) 20%, var(--bg-primary));
+  position: relative;
+}
+
+.task-icon::before {
+  content: '📝';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
 }
 
 .service-task-icon {
@@ -213,6 +223,82 @@
 
 .script-task-icon::before {
   content: '📜';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+}
+
+.business-rule-task-icon {
+  width: 24px;
+  height: 18px;
+  border: 1px solid var(--accent-color);
+  border-radius: 3px;
+  background: var(--accent-bg-light);
+  background: color-mix(in srgb, var(--accent-color) 20%, var(--bg-primary));
+  position: relative;
+}
+
+.business-rule-task-icon::before {
+  content: '📋';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+}
+
+.send-task-icon {
+  width: 24px;
+  height: 18px;
+  border: 1px solid var(--accent-color);
+  border-radius: 3px;
+  background: var(--accent-bg-light);
+  background: color-mix(in srgb, var(--accent-color) 20%, var(--bg-primary));
+  position: relative;
+}
+
+.send-task-icon::before {
+  content: '📤';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+}
+
+.receive-task-icon {
+  width: 24px;
+  height: 18px;
+  border: 1px solid var(--accent-color);
+  border-radius: 3px;
+  background: var(--accent-bg-light);
+  background: color-mix(in srgb, var(--accent-color) 20%, var(--bg-primary));
+  position: relative;
+}
+
+.receive-task-icon::before {
+  content: '📥';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+}
+
+.manual-task-icon {
+  width: 24px;
+  height: 18px;
+  border: 1px solid var(--accent-color);
+  border-radius: 3px;
+  background: var(--accent-bg-light);
+  background: color-mix(in srgb, var(--accent-color) 20%, var(--bg-primary));
+  position: relative;
+}
+
+.manual-task-icon::before {
+  content: '✋';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -448,4 +534,51 @@
   width: 4px;
   background: var(--text-secondary);
   border-right: 1px solid var(--text-primary);
+}
+
+/* Property Panel Toggle Styles */
+.property-panel-toggle-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.property-panel-toggle-button {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+}
+
+.property-panel-toggle-button:hover {
+  background: var(--hover-bg);
+  border-color: var(--accent-color);
+  transform: scale(1.05);
+}
+
+.property-panel-toggle-button.active {
+  background: var(--accent-color);
+  color: var(--text-on-accent, white);
+  border-color: var(--accent-hover);
+}
+
+.properties-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.properties-icon svg {
+  width: 100%;
+  height: 100%;
 }

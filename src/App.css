@@ -73,3 +73,27 @@
 .dark-theme {
   --theme-mode: 'dark';
 }
+
+/* React Flow node background removal */
+.react-flow__node {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.react-flow__node-default,
+.react-flow__node-input,
+.react-flow__node-output {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Ensure custom node containers have no background */
+[data-theme="dark"] .react-flow__node {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
