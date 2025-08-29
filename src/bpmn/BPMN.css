@@ -19,6 +19,7 @@
   --success-color: #28a745;
   --warning-color: #ffc107;
   --danger-color: #dc3545;
+  --message-flow-color: #ff6b6b;
   --node-bg: #ffffff;
   --node-border: #dee2e6;
   --handle-bg: #555555;
@@ -49,6 +50,7 @@
   --success-color: #4caf50;
   --warning-color: #ff9800;
   --danger-color: #f44336;
+  --message-flow-color: #ff7979;
   --node-bg: #2d2d2d;
   --node-border: #555555;
   --handle-bg: #888888;

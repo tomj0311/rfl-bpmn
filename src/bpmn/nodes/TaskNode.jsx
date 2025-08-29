@@ -36,24 +36,64 @@ const TaskNode = ({ data }) => {
 
   return (
     <div className="task-node">
+      {/* Original handles for backward compatibility */}
       <Handle
         type="target"
         position={Position.Left}
         id="task-input"
         className="handle"
       />
-      <div className="task-content">
-        <div className="task-type-icon">
-          {taskIcon}
-        </div>
-        <span className="node-label">{data.label}</span>
-      </div>
       <Handle
         type="source"
         position={Position.Right}
         id="task-output"
         className="handle"
       />
+      
+      {/* Additional handles for more connection flexibility */}
+      <Handle
+        type="source"
+        position={Position.Left}
+        id="task-left-source"
+        className="handle"
+      />
+      <Handle
+        type="target"
+        position={Position.Right}
+        id="task-right-target"
+        className="handle"
+      />
+      <Handle
+        type="source"
+        position={Position.Top}
+        id="task-top-source"
+        className="handle"
+      />
+      <Handle
+        type="target"
+        position={Position.Top}
+        id="task-top-target"
+        className="handle"
+      />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="task-bottom-source"
+        className="handle"
+      />
+      <Handle
+        type="target"
+        position={Position.Bottom}
+        id="task-bottom-target"
+        className="handle"
+      />
+      
+      <div className="task-content">
+        <div className="task-type-icon">
+          {taskIcon}
+        </div>
+        <span className="node-label">{data.label}</span>
+      </div>
     </div>
   );
 };

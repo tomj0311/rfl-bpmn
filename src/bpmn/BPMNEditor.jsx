@@ -102,16 +102,14 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
         return {
           ...edge,
           type: edge.type || 'smoothstep',
+          className: 'message-flow',
           markerEnd: {
             type: MarkerType.ArrowClosed,
             width: 12,
             height: 12,
-            color: '#666',
+            color: 'var(--message-flow-color)',
           },
           style: {
-            stroke: '#666',
-            strokeWidth: 2,
-            strokeDasharray: '5,5', // Dashed line for message flows
             ...edge.style,
           },
         };
@@ -124,11 +122,9 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
           type: MarkerType.ArrowClosed,
           width: 12,
           height: 12,
-          color: '#555',
+          color: 'var(--text-secondary)',
         },
         style: {
-          stroke: '#555',
-          strokeWidth: 2,
           ...edge.style,
         },
       };

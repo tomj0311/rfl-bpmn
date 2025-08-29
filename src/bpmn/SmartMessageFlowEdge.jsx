@@ -33,13 +33,9 @@ const SmartMessageFlowEdge = ({
       <path
         id={id}
         style={{
-          stroke: '#ff6b6b',
-          strokeWidth: 1,
-          strokeDasharray: '5,5',
-          fill: 'none',
           ...style
         }}
-        className="react-flow__edge-path"
+        className="react-flow__edge-path message-flow"
         d={edgePath}
         markerEnd={markerEnd}
       />

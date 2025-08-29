@@ -130,28 +130,88 @@
 .react-flow__edge-path {
   stroke: var(--text-secondary);
   stroke-width: 2;
+  transition: all 0.2s ease;
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
   stroke: var(--accent-color);
+  stroke-width: 3;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: var(--accent-hover);
+  stroke-width: 2.5;
 }
 
 /* React Flow Arrow Markers */
 .react-flow__arrowhead {
   fill: var(--text-secondary);
+  transition: all 0.2s ease;
 }
 
 .react-flow__edge.selected .react-flow__arrowhead {
   fill: var(--accent-color);
 }
 
+.react-flow__edge:hover .react-flow__arrowhead {
+  fill: var(--accent-hover);
+}
+
+/* Message Flow Edge Styles */
+.react-flow__edge[data-type="messageFlow"] .react-flow__edge-path,
+.react-flow__edge.message-flow .react-flow__edge-path {
+  stroke: var(--message-flow-color);
+  stroke-dasharray: 5,5;
+  stroke-width: 1.5;
+}
+
+.react-flow__edge[data-type="messageFlow"].selected .react-flow__edge-path,
+.react-flow__edge.message-flow.selected .react-flow__edge-path {
+  stroke: var(--accent-color);
+  stroke-width: 2.5;
+}
+
+.react-flow__edge[data-type="messageFlow"]:hover .react-flow__edge-path,
+.react-flow__edge.message-flow:hover .react-flow__edge-path {
+  stroke: var(--accent-hover);
+  stroke-width: 2;
+}
+
+.react-flow__edge[data-type="messageFlow"] .react-flow__arrowhead,
+.react-flow__edge.message-flow .react-flow__arrowhead {
+  fill: var(--message-flow-color);
+}
+
+.react-flow__edge[data-type="messageFlow"].selected .react-flow__arrowhead,
+.react-flow__edge.message-flow.selected .react-flow__arrowhead {
+  fill: var(--accent-color);
+}
+
+.react-flow__edge[data-type="messageFlow"]:hover .react-flow__arrowhead,
+.react-flow__edge.message-flow:hover .react-flow__arrowhead {
+  fill: var(--accent-hover);
+}
+
 .react-flow__edge-text {
   fill: var(--text-primary);
   background: var(--bg-primary);
+  transition: all 0.2s ease;
+}
+
+.react-flow__edge.selected .react-flow__edge-text {
+  fill: var(--accent-color);
+  font-weight: 600;
 }
 
 .react-flow__edge-textbg {
   fill: var(--bg-primary);
+}
+
+.react-flow__edge.selected .react-flow__edge-textbg {
+  fill: var(--bg-primary);
+  stroke: var(--accent-color);
+  stroke-width: 1;
+  stroke-opacity: 0.3;
 }
 
 /* Selection Box */
@@ -159,4 +219,9 @@
   background: rgba(var(--accent-color-rgb), 0.1);
   background: color-mix(in srgb, var(--accent-color) 10%, transparent);
   border: 1px solid var(--accent-color);
+}
+
+/* Enhanced selection feedback for edges */
+.react-flow__edge.selected {
+  z-index: 100;
 }

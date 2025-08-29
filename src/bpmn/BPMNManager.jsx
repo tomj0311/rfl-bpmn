@@ -910,7 +910,7 @@ const BPMNManager = ({ nodes, edges, onImportBPMN }) => {
                 source: sourceRef,
                 target: targetRef,
                 type: 'smoothstep',
-                style: { stroke: '#ff6b6b', strokeWidth: 1, strokeDasharray: '5,5' },
+                className: 'message-flow',
                 label: element.getAttribute('name') || '',
                 data: { isMessageFlow: true }
               });
