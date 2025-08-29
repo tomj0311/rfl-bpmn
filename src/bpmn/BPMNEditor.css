@@ -125,6 +125,15 @@
   stroke: var(--accent-color);
 }
 
+/* React Flow Arrow Markers */
+.react-flow__arrowhead {
+  fill: var(--text-secondary);
+}
+
+.react-flow__edge.selected .react-flow__arrowhead {
+  fill: var(--accent-color);
+}
+
 .react-flow__edge-text {
   fill: var(--text-primary);
   background: var(--bg-primary);

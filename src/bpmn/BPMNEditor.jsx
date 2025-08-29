@@ -97,9 +97,24 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
   // Function to update all edges with arrows
   const updateEdgesWithArrows = useCallback((edgesToUpdate) => {
     return edgesToUpdate.map(edge => {
-      // Skip message flows and other special edge types that might already have custom markers
+      // Handle message flows with special styling
       if (edge.data?.isMessageFlow || edge.type === 'messageFlow') {
-        return edge;
+        return {
+          ...edge,
+          type: edge.type || 'smoothstep',
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            width: 12,
+            height: 12,
+            color: '#666',
+          },
+          style: {
+            stroke: '#666',
+            strokeWidth: 2,
+            strokeDasharray: '5,5', // Dashed line for message flows
+            ...edge.style,
+          },
+        };
       }
       
       return {
@@ -107,8 +122,8 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
         type: edge.type || 'smoothstep', // Use smoothstep type for curved lines with smooth bends
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          width: 20,
-          height: 20,
+          width: 12,
+          height: 12,
           color: '#555',
         },
         style: {
@@ -268,23 +283,35 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
 
   const onConnect = useCallback(
     (params) => {
+      const sourceNode = nodes.find(n => n.id === params.source);
+      const targetNode = nodes.find(n => n.id === params.target);
+      
+      // Determine if this should be a message flow based on nodes being in different participants
+      let isMessageFlow = false;
+      if (sourceNode && targetNode) {
+        const sourceParticipant = sourceNode.parentNode || sourceNode.data?.participantId;
+        const targetParticipant = targetNode.parentNode || targetNode.data?.participantId;
+        
+        // If nodes are in different participants or one has a participant and the other doesn't
+        if ((sourceParticipant && targetParticipant && sourceParticipant !== targetParticipant) ||
+            (sourceParticipant && !targetParticipant) ||
+            (!sourceParticipant && targetParticipant)) {
+          isMessageFlow = true;
+        }
+      }
+
       const newEdge = {
         ...params,
-        type: 'smoothstep', // Use smoothstep type for curved lines with smooth bends
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          width: 20,
-          height: 20,
-          color: '#555',
-        },
-        style: {
-          stroke: '#555',
-          strokeWidth: 2,
-        },
+        type: 'smoothstep',
+        data: isMessageFlow ? { isMessageFlow: true } : {},
       };
-      setEdges((eds) => addEdge(newEdge, eds));
+      
+      setEdges((eds) => {
+        const updatedEdges = addEdge(newEdge, eds);
+        return updateEdgesWithArrows(updatedEdges);
+      });
     },
-    [setEdges],
+    [setEdges, nodes, updateEdgesWithArrows],
   );
 
   const onDragOver = useCallback((event) => {

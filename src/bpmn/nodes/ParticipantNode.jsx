@@ -19,7 +19,7 @@ const ParticipantNode = ({ data, style, selected }) => {
       }}
     >
       <NodeResizer
-        color="#1976d2"
+        color="#4a9eff"
         isVisible={selected}
         minWidth={300}
         minHeight={150}
@@ -41,26 +41,12 @@ const ParticipantNode = ({ data, style, selected }) => {
               key={lane.id}
               className="lane-division"
               style={{
-                position: 'absolute',
-                left: '0px',
                 top: `${laneTop}px`,
-                width: '30px',
                 height: `${laneHeight}px`,
-                borderBottom: index < lanes.length - 1 ? '1px solid #757575' : 'none',
-                background: '#f5f5f5',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '11px',
-                fontWeight: '500',
-                color: '#424242'
+                borderBottom: index < lanes.length - 1 ? 'none' : 'none'
               }}
             >
-              <span style={{ 
-                transform: 'rotate(-90deg)', 
-                transformOrigin: 'center',
-                whiteSpace: 'nowrap'
-              }}>
+              <span className="lane-division-label">
                 {lane.name}
               </span>
             </div>
@@ -77,12 +63,8 @@ const ParticipantNode = ({ data, style, selected }) => {
               key={`separator-${lane.id}`}
               className="lane-separator"
               style={{
-                position: 'absolute',
-                left: '30px',
                 top: `${separatorTop}px`,
-                width: `${width - 60}px`,
-                height: '1px',
-                background: '#757575'
+                width: `${width - 60}px`
               }}
             />
           );
