@@ -5,9 +5,89 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BPMN Editor</title>
+    <style>
+      /* Prevent white flash by setting initial theme */
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        color: #212529;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      
+      /* Check for dark mode preference and apply immediately */
+      @media (prefers-color-scheme: dark) {
+        html, body {
+          background-color: #1a1a1a;
+          color: #e0e0e0;
+        }
+      }
+      
+      /* Override with saved preference if it exists */
+      html[data-theme="dark"], html[data-theme="dark"] body {
+        background-color: #1a1a1a !important;
+        color: #e0e0e0 !important;
+      }
+      
+      html[data-theme="light"], html[data-theme="light"] body {
+        background-color: #ffffff !important;
+        color: #212529 !important;
+      }
+      
+      #root {
+        height: 100vh;
+        width: 100vw;
+        min-height: 100vh;
+      }
+      
+      /* Loading state styles */
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: inherit;
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-top: 3px solid #1976d2;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        .loading-spinner {
+          border: 3px solid rgba(255, 255, 255, 0.1);
+          border-top: 3px solid #4a9eff;
+        }
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    <script>
+      // Apply saved theme immediately before any React rendering
+      (function() {
+        const savedTheme = localStorage.getItem('bpmn-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Fallback loading indicator -->
+      <div class="loading-container">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

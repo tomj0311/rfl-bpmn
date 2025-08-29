@@ -1,31 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import BPMNEditor from './components/BPMNEditor';
+import React from 'react';
+import BPMN from './bpmn/BPMN';
 import './App.css';
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Load theme preference from localStorage on component mount
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('bpmn-theme');
-    if (savedTheme === 'dark') {
-      setIsDarkMode(true);
-    }
-  }, []);
-
-  // Save theme preference to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('bpmn-theme', isDarkMode ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
+  const handleThemeChange = (theme) => {
+    // Optional: Handle theme changes at the app level
+    console.log('BPMN theme changed to:', theme);
   };
 
   return (
-    <div className={`App ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
-      <BPMNEditor isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
+    <div className="App">
+      <BPMN 
+        initialTheme="auto" 
+        onThemeChange={handleThemeChange}
+      />
     </div>
   );
 }

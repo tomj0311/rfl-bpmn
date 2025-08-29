@@ -1,11 +1,11 @@
 import React from 'react';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position, NodeResizer } from 'reactflow';
 import './BPMNNodes.css';
 
-const ParticipantNode = ({ data, style }) => {
+const ParticipantNode = ({ data, style, selected }) => {
   // Use dynamic width and height from style if available, with reasonable defaults
-  const width = style?.width || data?.participantBounds?.width || 910;
-  const height = style?.height || data?.participantBounds?.height || 250;
+  const width = style?.width || data?.participantBounds?.width || 400;
+  const height = style?.height || data?.participantBounds?.height || 200;
   const lanes = data.lanes || [];
   
   return (
@@ -18,6 +18,12 @@ const ParticipantNode = ({ data, style }) => {
         minHeight: `${Math.min(height, 150)}px`
       }}
     >
+      <NodeResizer
+        color="#1976d2"
+        isVisible={selected}
+        minWidth={300}
+        minHeight={150}
+      />
       <div className="participant-header">
         <span className="participant-label">{data.label}</span>
       </div>

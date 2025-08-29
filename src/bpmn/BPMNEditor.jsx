@@ -125,98 +125,20 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
     setEdges((eds) => updateEdgesWithArrows(eds));
   }, [updateEdgesWithArrows]); // Added dependency
 
-  // Utility function to recalculate participant bounds based on child nodes
-  const updateParticipantBounds = useCallback((participantId, allNodes) => {
-    const participantNodes = allNodes.filter(node => 
-      node.parentNode === participantId && node.type !== 'participant'
-    );
-    
-    if (participantNodes.length === 0) {
-      return allNodes; // No changes if no child nodes
-    }
-    
-    // Get element dimensions helper
-    const getNodeDimensions = (nodeType) => {
-      switch (nodeType) {
-        case 'startEvent':
-        case 'endEvent':
-        case 'intermediateEvent':
-          return { width: 40, height: 40 };
-        case 'gateway':
-          return { width: 50, height: 50 };
-        case 'task':
-        case 'serviceTask':
-        case 'userTask':
-        case 'scriptTask':
-        case 'businessRuleTask':
-        case 'sendTask':
-        case 'receiveTask':
-        case 'manualTask':
-          return { width: 100, height: 60 };
-        case 'subProcess':
-        case 'callActivity':
-          return { width: 120, height: 80 };
-        case 'dataObject':
-          return { width: 36, height: 50 };
-        case 'dataStore':
-          return { width: 50, height: 60 };
-        case 'group':
-          return { width: 200, height: 150 };
-        case 'textAnnotation':
-          return { width: 100, height: 30 };
-        default:
-          return { width: 100, height: 60 };
-      }
-    };
-    
-    // Calculate bounds of all child nodes
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    
-    participantNodes.forEach(node => {
-      const { width, height } = getNodeDimensions(node.type);
-      
-      // Ensure nodes don't go into the lane label area
-      const adjustedX = Math.max(node.position.x, 80);
-      const adjustedY = Math.max(node.position.y, 50);
-      
-      minX = Math.min(minX, adjustedX);
-      minY = Math.min(minY, adjustedY);
-      maxX = Math.max(maxX, adjustedX + width);
-      maxY = Math.max(maxY, adjustedY + height);
-    });
-    
-    // Add padding around the elements
-    const padding = 40;
-    const headerHeight = 40;
-    const laneAreaWidth = 60; // Extra space for lane labels on the left
-    
-    // Calculate new participant bounds
-    const newWidth = (maxX - minX) + (padding * 2) + laneAreaWidth;
-    const newHeight = (maxY - minY) + headerHeight + padding;
-    
-    // Ensure minimum size (including lane area)
-    const minWidth = 300 + laneAreaWidth;
-    const minHeight = 150;
-    const finalWidth = Math.max(newWidth, minWidth);
-    const finalHeight = Math.max(newHeight, minHeight);
-    
-    // Update participant node
+  // Utility function to update participant bounds data (without automatic resizing)
+  const updateParticipantBoundsData = useCallback((participantId, allNodes) => {
+    // Only update the bounds data to reflect current position and size, don't auto-resize
     return allNodes.map(node => {
       if (node.id === participantId && node.type === 'participant') {
         return {
           ...node,
-          style: {
-            ...node.style,
-            width: finalWidth,
-            height: finalHeight
-          },
           data: {
             ...node.data,
             participantBounds: {
               x: node.position.x,
               y: node.position.y,
-              width: finalWidth,
-              height: finalHeight
+              width: node.style?.width || node.data?.participantBounds?.width || 400,
+              height: node.style?.height || node.data?.participantBounds?.height || 200
             }
           }
         };
@@ -225,7 +147,7 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
     });
   }, []);
 
-  // Enhanced onNodesChange to update participant bounds when child nodes move
+  // Enhanced onNodesChange to handle participant movement and child node movement
   const onNodesChangeWithBoundsUpdate = useCallback((changes) => {
     setNodes(currentNodes => {
       let newNodes = applyNodeChanges(changes, currentNodes);
@@ -233,22 +155,116 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
       // Check if any nodes were moved and update their parent participant bounds
       const movedNodes = changes.filter(change => change.type === 'position' && change.dragging === false);
       const participantsToUpdate = new Set();
+      const movedParticipants = new Set();
+      
+      // Track participant movements and child movements during dragging
+      const draggedNodes = changes.filter(change => change.type === 'position' && change.dragging === true);
+      
+      // Track resized participants
+      const resizedParticipants = changes.filter(change => change.type === 'dimensions');
+      
+      // Handle participant movement - ensure child nodes move with participant
+      const participantMovements = new Map();
       
       movedNodes.forEach(change => {
         const node = newNodes.find(n => n.id === change.id);
-        if (node && node.parentNode) {
-          participantsToUpdate.add(node.parentNode);
+        if (node) {
+          if (node.type === 'participant') {
+            // Track moved participants to update their bounds data
+            movedParticipants.add(node.id);
+            
+            // Calculate the delta movement for this participant
+            const oldNode = currentNodes.find(n => n.id === change.id);
+            if (oldNode && (oldNode.position.x !== node.position.x || oldNode.position.y !== node.position.y)) {
+              const deltaX = node.position.x - oldNode.position.x;
+              const deltaY = node.position.y - oldNode.position.y;
+              participantMovements.set(node.id, { deltaX, deltaY });
+            }
+          }
+          // Remove automatic bounds updating for child nodes
         }
       });
       
-      // Update bounds for affected participants
-      participantsToUpdate.forEach(participantId => {
-        newNodes = updateParticipantBounds(participantId, newNodes);
+      // Handle participant resizing
+      resizedParticipants.forEach(change => {
+        const node = newNodes.find(n => n.id === change.id);
+        if (node && node.type === 'participant') {
+          // Update the node's style and data when resized
+          newNodes = newNodes.map(n => {
+            if (n.id === change.id && n.type === 'participant') {
+              return {
+                ...n,
+                style: {
+                  ...n.style,
+                  width: change.dimensions?.width ?? n.style?.width,
+                  height: change.dimensions?.height ?? n.style?.height
+                },
+                data: {
+                  ...n.data,
+                  participantBounds: {
+                    x: n.position.x,
+                    y: n.position.y,
+                    width: change.dimensions?.width ?? n.style?.width ?? 400,
+                    height: change.dimensions?.height ?? n.style?.height ?? 200
+                  }
+                }
+              };
+            }
+            return n;
+          });
+        }
+      });
+      
+      // Apply movement delta to child nodes if their participant moved
+      if (participantMovements.size > 0) {
+        newNodes = newNodes.map(node => {
+          if (node.parentNode && participantMovements.has(node.parentNode)) {
+            const { deltaX, deltaY } = participantMovements.get(node.parentNode);
+            return {
+              ...node,
+              position: {
+                x: node.position.x + deltaX,
+                y: node.position.y + deltaY
+              }
+            };
+          }
+          return node;
+        });
+      }
+      
+      // Handle real-time participant movement (during dragging)
+      draggedNodes.forEach(change => {
+        const node = newNodes.find(n => n.id === change.id);
+        if (node && node.type === 'participant') {
+          // Update participant bounds data during dragging for real-time feedback
+          newNodes = newNodes.map(n => {
+            if (n.id === change.id && n.type === 'participant') {
+              return {
+                ...n,
+                data: {
+                  ...n.data,
+                  participantBounds: {
+                    x: change.position?.x ?? n.position.x,
+                    y: change.position?.y ?? n.position.y,
+                    width: n.style?.width || n.data?.participantBounds?.width || 400,
+                    height: n.style?.height || n.data?.participantBounds?.height || 200
+                  }
+                }
+              };
+            }
+            return n;
+          });
+        }
+      });
+      
+      // Update bounds data for moved participants (position only, not size)
+      movedParticipants.forEach(participantId => {
+        newNodes = updateParticipantBoundsData(participantId, newNodes);
       });
       
       return newNodes;
     });
-  }, [updateParticipantBounds]);
+  }, [updateParticipantBoundsData]);
 
   const onConnect = useCallback(
     (params) => {
@@ -365,14 +381,13 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
             newNode.position.y = 50;
           }
           
-          // Update participant bounds
-          return updateParticipantBounds(droppedInParticipant.id, updatedNodes);
+          // No automatic bounds updating - let user resize manually
         }
         
         return updatedNodes;
       });
     },
-    [reactFlowInstance, project, setNodes, updateParticipantBounds],
+    [reactFlowInstance, project, setNodes],
   );
 
   const onNodeDoubleClick = useCallback((event, node) => {
@@ -642,6 +657,8 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
             nodesDraggable={true}
             nodesConnectable={true}
             elementsSelectable={true}
+            elevateNodesOnSelect={false}
+            nodeOrigin={[0, 0]}
             deleteKeyCode={null}
             connectionLineType={ConnectionLineType.SmoothStep}
             connectionMode="loose"
