@@ -15,7 +15,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 
 import Toolbar from './Toolbar';
-import BPMNExporter from './BPMNExporter';
+import BPMNExporter from './BPMNManager';
 import StartEventNode from './nodes/StartEventNode';
 import EndEventNode from './nodes/EndEventNode';
 import TaskNode from './nodes/TaskNode';

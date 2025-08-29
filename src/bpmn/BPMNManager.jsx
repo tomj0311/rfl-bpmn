@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './BPMNExporter.css';
+import './BPMNManager.css';
 
-const BPMNExporter = ({ nodes, edges, onImportBPMN }) => {
+const BPMNManager = ({ nodes, edges, onImportBPMN }) => {
   const [showXML, setShowXML] = useState(false);
   const [bpmnXML, setBpmnXML] = useState('');
   const [showPasteArea, setShowPasteArea] = useState(false);
@@ -1226,4 +1226,4 @@ const BPMNExporter = ({ nodes, edges, onImportBPMN }) => {
   );
 };
 
-export default BPMNExporter;
+export default BPMNManager;
