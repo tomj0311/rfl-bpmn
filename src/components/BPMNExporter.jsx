@@ -881,7 +881,7 @@ const BPMNExporter = ({ nodes, edges, onImportBPMN }) => {
               id,
               source: sourceRef,
               target: targetRef,
-              type: 'smoothstep',
+              type: 'step', // Use step type for orthogonal lines
               label: element.getAttribute('name') || '',
               data: {
                 originalEdgeShapeId: originalEdgeShapeId

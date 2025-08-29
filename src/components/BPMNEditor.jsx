@@ -10,6 +10,7 @@ import ReactFlow, {
   useReactFlow,
   applyNodeChanges,
   MarkerType,
+  ConnectionLineType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -103,6 +104,7 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
       
       return {
         ...edge,
+        type: edge.type || 'smoothstep', // Use smoothstep type for curved lines with smooth bends
         markerEnd: {
           type: MarkerType.ArrowClosed,
           width: 20,
@@ -252,6 +254,7 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
     (params) => {
       const newEdge = {
         ...params,
+        type: 'smoothstep', // Use smoothstep type for curved lines with smooth bends
         markerEnd: {
           type: MarkerType.ArrowClosed,
           width: 20,
@@ -640,6 +643,8 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
             nodesConnectable={true}
             elementsSelectable={true}
             deleteKeyCode={null}
+            connectionLineType={ConnectionLineType.SmoothStep}
+            connectionMode="loose"
             style={{ 
               marginRight: (isPanelOpen ? '25vw' : '0') + (isPropertyPanelOpen ? '320px' : '0'), 
               maxWidth: `calc(100vw - ${isPanelOpen ? '25vw' : '0'} - ${isPropertyPanelOpen ? '320px' : '0'})`,
