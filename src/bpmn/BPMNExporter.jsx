@@ -881,7 +881,7 @@ const BPMNExporter = ({ nodes, edges, onImportBPMN }) => {
               id,
               source: sourceRef,
               target: targetRef,
-              type: 'step', // Use step type for orthogonal lines
+              type: 'smoothstep', // Use smoothstep type for smooth curved lines
               label: element.getAttribute('name') || '',
               data: {
                 originalEdgeShapeId: originalEdgeShapeId
@@ -909,7 +909,7 @@ const BPMNExporter = ({ nodes, edges, onImportBPMN }) => {
                 id,
                 source: sourceRef,
                 target: targetRef,
-                type: 'step',
+                type: 'smoothstep',
                 style: { stroke: '#ff6b6b', strokeWidth: 1, strokeDasharray: '5,5' },
                 label: element.getAttribute('name') || '',
                 data: { isMessageFlow: true }
