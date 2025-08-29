@@ -9,6 +9,7 @@ import ReactFlow, {
   Background,
   useReactFlow,
   applyNodeChanges,
+  MarkerType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -89,7 +90,38 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [selectedEdge, setSelectedEdge] = useState(null);
   const [isPropertyPanelOpen, setIsPropertyPanelOpen] = useState(false);
+  const [userManuallyClosed, setUserManuallyClosed] = useState(false);
   const { project, fitView } = useReactFlow();
+
+  // Function to update all edges with arrows
+  const updateEdgesWithArrows = useCallback((edgesToUpdate) => {
+    return edgesToUpdate.map(edge => {
+      // Skip message flows and other special edge types that might already have custom markers
+      if (edge.data?.isMessageFlow || edge.type === 'messageFlow') {
+        return edge;
+      }
+      
+      return {
+        ...edge,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+          color: '#555',
+        },
+        style: {
+          stroke: '#555',
+          strokeWidth: 2,
+          ...edge.style,
+        },
+      };
+    });
+  }, []);
+
+  // Update existing edges when component mounts
+  useEffect(() => {
+    setEdges((eds) => updateEdgesWithArrows(eds));
+  }, [updateEdgesWithArrows]); // Added dependency
 
   // Utility function to recalculate participant bounds based on child nodes
   const updateParticipantBounds = useCallback((participantId, allNodes) => {
@@ -217,7 +249,22 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
   }, [updateParticipantBounds]);
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
+    (params) => {
+      const newEdge = {
+        ...params,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+          color: '#555',
+        },
+        style: {
+          stroke: '#555',
+          strokeWidth: 2,
+        },
+      };
+      setEdges((eds) => addEdge(newEdge, eds));
+    },
     [setEdges],
   );
 
@@ -344,18 +391,25 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
     setSelectedNode(selectedNode || null);
     setSelectedEdge(selectedEdge || null);
     
-    // Auto-open property panel when something is selected
-    if ((selectedNode || selectedEdge) && !isPropertyPanelOpen) {
+    // Auto-open property panel when something is selected, but only if user hasn't manually closed it
+    if ((selectedNode || selectedEdge) && !isPropertyPanelOpen && !userManuallyClosed) {
       setIsPropertyPanelOpen(true);
     }
-  }, [isPropertyPanelOpen]);
+    
+    // Reset the manual close flag when nothing is selected
+    if (!selectedNode && !selectedEdge) {
+      setUserManuallyClosed(false);
+    }
+  }, [isPropertyPanelOpen, userManuallyClosed]);
 
   // Node click handler
   const onNodeClick = useCallback((event, node) => {
     setSelectedNode(node);
     setSelectedEdge(null);
+    // Always open property panel when user explicitly clicks a node
     if (!isPropertyPanelOpen) {
       setIsPropertyPanelOpen(true);
+      setUserManuallyClosed(false); // Reset manual close flag since user is interacting
     }
   }, [isPropertyPanelOpen]);
 
@@ -363,8 +417,10 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
   const onEdgeClick = useCallback((event, edge) => {
     setSelectedEdge(edge);
     setSelectedNode(null);
+    // Always open property panel when user explicitly clicks an edge
     if (!isPropertyPanelOpen) {
       setIsPropertyPanelOpen(true);
+      setUserManuallyClosed(false); // Reset manual close flag since user is interacting
     }
   }, [isPropertyPanelOpen]);
 
@@ -372,6 +428,21 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
   const onPaneClick = useCallback(() => {
     setSelectedNode(null);
     setSelectedEdge(null);
+  }, []);
+
+  // Custom property panel toggle handler
+  const handlePropertyPanelToggle = useCallback(() => {
+    setIsPropertyPanelOpen(prev => {
+      const newState = !prev;
+      // If closing the panel, mark that user manually closed it
+      if (!newState) {
+        setUserManuallyClosed(true);
+      } else {
+        // If opening the panel, reset the manual close flag
+        setUserManuallyClosed(false);
+      }
+      return newState;
+    });
   }, []);
 
   // Update node data from property panel
@@ -444,7 +515,10 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
 
   const handleImportBPMN = useCallback((importedNodes, importedEdges) => {
     setNodes(importedNodes);
-    setEdges(importedEdges);
+    
+    // Apply arrows to imported edges
+    const edgesWithArrows = updateEdgesWithArrows(importedEdges);
+    setEdges(edgesWithArrows);
     
     // Extract participants from imported nodes
     const importedParticipants = importedNodes
@@ -469,7 +543,7 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
     
     // Trigger fit view after nodes are set
     setShouldFitView(true);
-  }, [setNodes, setEdges, setParticipants]);
+  }, [setNodes, setEdges, setParticipants, updateEdgesWithArrows]);
 
   const handleAddParticipant = useCallback((participantName) => {
     const participantId = `participant_${Date.now()}`;
@@ -543,7 +617,7 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
         isDarkMode={isDarkMode} 
         onToggleTheme={onToggleTheme}
         isPropertyPanelOpen={isPropertyPanelOpen}
-        onTogglePropertyPanel={() => setIsPropertyPanelOpen(!isPropertyPanelOpen)}
+        onTogglePropertyPanel={handlePropertyPanelToggle}
       />
       <div className="editor-content">
         <div className="reactflow-wrapper" ref={reactFlowWrapper} tabIndex={0}>
@@ -589,7 +663,7 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
           onNodeUpdate={handleNodeUpdate}
           onEdgeUpdate={handleEdgeUpdate}
           isOpen={isPropertyPanelOpen}
-          onToggle={() => setIsPropertyPanelOpen(!isPropertyPanelOpen)}
+          onToggle={handlePropertyPanelToggle}
         />
       </div>
     </div>
