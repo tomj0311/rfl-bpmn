@@ -21,8 +21,8 @@ function BPMN({
   style = {},
   ...props 
 }) {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Initialize theme based on prop or system preference
+  // Initialize theme synchronously to prevent flash
+  const getInitialTheme = () => {
     if (initialTheme === 'auto') {
       const savedTheme = localStorage.getItem('bpmn-theme');
       if (savedTheme) {
@@ -31,9 +31,10 @@ function BPMN({
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return initialTheme === 'dark';
-  });
+  };
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(getInitialTheme);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Load theme preference and set up the component
   useEffect(() => {
@@ -49,12 +50,8 @@ function BPMN({
     
     setIsDarkMode(shouldBeDark);
     
-    // Apply theme to this component's container
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 100);
-    
-    return () => clearTimeout(timer);
+    // Apply theme immediately without loading delay
+    setIsLoading(false);
   }, [initialTheme]);
 
   // Save theme preference to localStorage and notify parent
@@ -76,7 +73,7 @@ function BPMN({
   // Show loading state briefly to prevent flash
   if (isLoading) {
     return (
-      <div className={`bpmn-loading-container ${className}`} style={style}>
+      <div className={`bpmn-loading-container ${isDarkMode ? 'bpmn-dark-theme' : 'bpmn-light-theme'} ${className}`} style={style}>
         <div className="bpmn-loading-spinner"></div>
       </div>
     );

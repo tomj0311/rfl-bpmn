@@ -4,11 +4,17 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Default light theme variables */
+  --bg-primary: #ffffff;
+  --text-primary: #212529;
+}
+
 html, body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background-color: var(--bg-primary, #ffffff);
-  color: var(--text-primary, #212529);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
   height: 100%;
   overflow: hidden;
 }
@@ -17,4 +23,6 @@ html, body {
   height: 100vh;
   width: 100vw;
   min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
