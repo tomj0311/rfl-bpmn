@@ -111,6 +111,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  z-index: 0;
 }
 
 .gateway-diamond {
@@ -123,6 +124,50 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  z-index: 0;
+}
+
+/* Gateway node specific handle positioning */
+.gateway-node .handle {
+  position: absolute;
+  z-index: 20;
+  pointer-events: all;
+  cursor: crosshair;
+}
+
+/* Position handles at the actual points of the rotated diamond */
+.gateway-node .react-flow__handle-left {
+  left: -12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.gateway-node .react-flow__handle-right {
+  right: -12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.gateway-node .react-flow__handle-top {
+  top: -12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+.gateway-node .react-flow__handle-bottom {
+  bottom: -12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Enhanced visibility for gateway node handles */
+.gateway-node:hover .handle {
+  opacity: 1 !important;
+  width: 12px !important;
+  height: 12px !important;
+  background: var(--warning-color) !important;
+  border: 2px solid var(--bg-primary) !important;
+  box-shadow: 0 0 0 1px var(--warning-color), 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Data Object Node */
