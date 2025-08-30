@@ -134,13 +134,13 @@
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
-  stroke: var(--accent-color);
-  stroke-width: 3;
+  stroke: var(--accent-color) !important;
+  stroke-width: 4;
 }
 
 .react-flow__edge:hover .react-flow__edge-path {
-  stroke: var(--accent-hover);
-  stroke-width: 2.5;
+  stroke: var(--accent-hover) !important;
+  stroke-width: 3;
 }
 
 /* React Flow Arrow Markers */
@@ -150,46 +150,57 @@
 }
 
 .react-flow__edge.selected .react-flow__arrowhead {
-  fill: var(--accent-color);
+  fill: var(--accent-color) !important;
 }
 
 .react-flow__edge:hover .react-flow__arrowhead {
-  fill: var(--accent-hover);
+  fill: var(--accent-hover) !important;
 }
 
-/* Message Flow Edge Styles */
+/* Message Flow Edge Styles - OVERRIDE GENERAL RULES */
 .react-flow__edge[data-type="messageFlow"] .react-flow__edge-path,
 .react-flow__edge.message-flow .react-flow__edge-path {
-  stroke: var(--message-flow-color);
+  stroke: var(--message-flow-color) !important;
   stroke-dasharray: 5,5;
+  stroke-width: 1.5;
+}
+
+.react-flow__edge[data-type="messageFlow"]:hover .react-flow__edge-path,
+.react-flow__edge.message-flow:hover .react-flow__edge-path {
+  stroke: var(--accent-hover) !important;
   stroke-width: 1.5;
 }
 
 .react-flow__edge[data-type="messageFlow"].selected .react-flow__edge-path,
 .react-flow__edge.message-flow.selected .react-flow__edge-path {
-  stroke: var(--accent-color);
-  stroke-width: 2.5;
+  stroke: var(--accent-hover) !important;
+  stroke-width: 1.5;
 }
 
-.react-flow__edge[data-type="messageFlow"]:hover .react-flow__edge-path,
-.react-flow__edge.message-flow:hover .react-flow__edge-path {
-  stroke: var(--accent-hover);
-  stroke-width: 2;
+.react-flow__edge[data-type="messageFlow"].selected:hover .react-flow__edge-path,
+.react-flow__edge.message-flow.selected:hover .react-flow__edge-path {
+  stroke: var(--accent-hover) !important;
+  stroke-width: 1.5;
 }
 
 .react-flow__edge[data-type="messageFlow"] .react-flow__arrowhead,
 .react-flow__edge.message-flow .react-flow__arrowhead {
-  fill: var(--message-flow-color);
-}
-
-.react-flow__edge[data-type="messageFlow"].selected .react-flow__arrowhead,
-.react-flow__edge.message-flow.selected .react-flow__arrowhead {
-  fill: var(--accent-color);
+  fill: var(--message-flow-color) !important;
 }
 
 .react-flow__edge[data-type="messageFlow"]:hover .react-flow__arrowhead,
 .react-flow__edge.message-flow:hover .react-flow__arrowhead {
-  fill: var(--accent-hover);
+  fill: var(--accent-hover) !important;
+}
+
+.react-flow__edge[data-type="messageFlow"].selected .react-flow__arrowhead,
+.react-flow__edge.message-flow.selected .react-flow__arrowhead {
+  fill: var(--accent-hover) !important;
+}
+
+.react-flow__edge[data-type="messageFlow"].selected:hover .react-flow__arrowhead,
+.react-flow__edge.message-flow.selected:hover .react-flow__arrowhead {
+  fill: var(--accent-hover) !important;
 }
 
 .react-flow__edge-text {
