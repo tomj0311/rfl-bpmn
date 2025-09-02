@@ -5,9 +5,9 @@
     <bpmn2:participant id="id-ba446fe3-fc5a-468a-879f-636efa8ae458" name="Car Wash Machine" processRef="Process_id-ba446fe3-fc5a-468a-879f-636efa8ae458">
       <bpmn2:documentation>&lt;p class="m-0 mb-[8px] relative last:mb-0"&gt;&lt;br&gt;&lt;/p&gt;</bpmn2:documentation>
     </bpmn2:participant>
-    <bpmn2:messageFlow id="id-4d638cc4-851d-4b91-b5af-9e6957efa908" name="" sourceRef="id-f8d9d1e1-c93c-4092-bebb-038274d493b7" targetRef="id-394d3246-4552-4999-b0f4-2c11960a843e" />
-    <bpmn2:messageFlow id="id-9ab5afb1-3d22-4a19-8630-b1231247348d" name="" sourceRef="id-5953c915-9df3-4c62-b85e-5ac1aa52a21b" targetRef="id-c14199c8-b786-4fa5-b985-bbb856303824" />
-    <bpmn2:messageFlow id="id-cfeb8788-b62b-4cf5-8592-1fce0893264f" name="" sourceRef="id-de9b2fec-0186-4892-aefa-b6a905e4db1e" targetRef="id-394d3246-4552-4999-b0f4-2c11960a843e" />
+    <bpmn2:messageFlow id="id-4d638cc4-851d-4b91-b5af-9e6957efa908" name="Payment" sourceRef="id-f8d9d1e1-c93c-4092-bebb-038274d493b7" targetRef="id-394d3246-4552-4999-b0f4-2c11960a843e" />
+    <bpmn2:messageFlow id="id-9ab5afb1-3d22-4a19-8630-b1231247348d" name="Car Ready" sourceRef="id-5953c915-9df3-4c62-b85e-5ac1aa52a21b" targetRef="id-c14199c8-b786-4fa5-b985-bbb856303824" />
+    <bpmn2:messageFlow id="id-cfeb8788-b62b-4cf5-8592-1fce0893264f" name="Payment 2" sourceRef="id-de9b2fec-0186-4892-aefa-b6a905e4db1e" targetRef="id-394d3246-4552-4999-b0f4-2c11960a843e" />
   </bpmn2:collaboration>
   <bpmn2:process id="Process_id-54d8a5a1-c344-492c-bf9f-b29ad9662303" name="Customer">
     <bpmn2:task id="id-c14199c8-b786-4fa5-b985-bbb856303824" name="Drives away">

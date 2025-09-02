@@ -103,6 +103,7 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
           ...edge,
           type: 'smoothstep',
           className: 'message-flow',
+          label: edge.label || '', // Preserve the label
           markerEnd: {
             type: MarkerType.ArrowClosed,
           },
@@ -118,6 +119,7 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
       return {
         ...edge,
         type: 'smoothstep',
+        label: edge.label || '', // Preserve the label
         markerEnd: {
           type: MarkerType.ArrowClosed,
         },
@@ -684,6 +686,11 @@ const BPMNEditorFlow = ({ isDarkMode, onToggleTheme }) => {
             deleteKeyCode={null}
             connectionLineType={ConnectionLineType.SmoothStep}
             connectionMode="loose"
+            defaultEdgeOptions={{
+              type: 'smoothstep',
+              animated: false,
+              style: { strokeWidth: 2 }
+            }}
             style={{ 
               marginRight: (isPanelOpen ? '25vw' : '0') + (isPropertyPanelOpen ? '320px' : '0'), 
               maxWidth: `calc(100vw - ${isPanelOpen ? '25vw' : '0'} - ${isPropertyPanelOpen ? '320px' : '0'})`,
