@@ -57,6 +57,9 @@
   justify-content: center;
   padding: 8px;
   position: relative;
+  /* Smooth hover glow without layout shifts */
+  transition: box-shadow 150ms ease;
+  will-change: box-shadow;
 }
 
 .task-type-icon {
@@ -297,9 +300,9 @@
 }
 
 .task-node:hover .task-content {
+  /* Match gateway glow style (no scale) */
   border-color: var(--accent-hover);
   box-shadow: 0 0 8px color-mix(in srgb, var(--accent-color) 30%, transparent);
-  transform: scale(1.02);
   transition: all 0.2s ease;
 }
 
